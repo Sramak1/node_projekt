@@ -7,6 +7,8 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
+import { TaskModule } from './task/task.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { AuthModule } from './auth/auth.module';
       synchronize: true,
     }),
     AuthModule,
+    TaskModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

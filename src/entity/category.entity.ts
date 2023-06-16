@@ -4,24 +4,27 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Task } from './task.entity';
 
-@Entity('users')
-export class User {
+@Entity('categories')
+export class Category {
   @PrimaryGeneratedColumn()
   id: number;
+
   @Column()
-  first_name: string;
+  title: string;
+
   @Column()
-  last_name: string;
-  @Column({ unique: true })
-  email: string;
-  @Column()
-  password: string;
+  description: string;
+
   @CreateDateColumn()
   created_at: Date;
 
-  @OneToMany(() => Task, (task: Task) => task.user)
+  @UpdateDateColumn()
+  updated_at: Date;
+
+  @OneToMany(() => Task, (task: Task) => task.category)
   tasks: Task[];
 }
