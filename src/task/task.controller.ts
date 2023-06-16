@@ -26,9 +26,20 @@ export class TaskController {
     return this.taskService.create(req.user.id, createTaskDto);
   }
 
+  @UseGuards(jwtAuthGuard)
+  @Post('upvote/:id')
+  upvote(@Param('id') taskId: number) {
+    return this.taskService.upvoted(taskId);
+  }
+
   @Get()
   findAll() {
     return this.taskService.findAll();
+  }
+
+  @Get('mostVoted')
+  findMostVoted() {
+    return this.taskService.findMostVoted();
   }
 
   @Get(':id')

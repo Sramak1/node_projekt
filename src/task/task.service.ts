@@ -4,6 +4,7 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DeleteResult } from 'typeorm';
 import { Task } from '../entity/task.entity';
+import { User } from '../entity/user.entity';
 
 @Injectable()
 export class TaskService {
@@ -39,5 +40,15 @@ export class TaskService {
 
   remove(id: number): Promise<DeleteResult> {
     return this.taskRepository.delete(id);
+  }
+  findMostVoted() {
+    return this.taskRepository.find({ order: { karma: 'desc' } });
+  }
+
+  async upvoted(id: number) {
+    const task = await this.findOne(id);
+    task.voted = true;
+    task.karma = task.karma + 1;
+    return await this.taskRepository.save(task);
   }
 }

@@ -8,5 +8,8 @@ export class CreateTaskDto {
   content: string;
 
   @IsNotEmpty()
+  votes: number;
+
+  @IsNotEmpty()
   category_id: number;
 }
