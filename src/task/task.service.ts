@@ -23,7 +23,7 @@ export class TaskService {
   }
 
   async findAll(): Promise<Task[]> {
-    return await this.taskRepository.find();
+    return await this.taskRepository.find({ relations: ['user'] });
   }
 
   async findOne(id: number): Promise<Task> {
@@ -42,7 +42,10 @@ export class TaskService {
     return this.taskRepository.delete(id);
   }
   findMostVoted() {
-    return this.taskRepository.find({ order: { karma: 'desc' } });
+    return this.taskRepository.find({
+      order: { karma: 'desc' },
+      relations: ['user'],
+    });
   }
 
   async upvoted(id: number) {
