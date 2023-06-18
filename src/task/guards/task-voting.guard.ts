@@ -7,10 +7,10 @@ export class TaskVotingGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const { user, params } = context.switchToHttp().getRequest();
-    console.log(user);
     for (const iterator of user.tasks) {
-      if (iterator.tasks.id == params.id) {
-        if (iterator.tasks.voted != true) {
+      console.log(iterator);
+      if (iterator.id == params.id) {
+        if (iterator.voted != true) {
           return true;
         }
       }

@@ -29,7 +29,7 @@ export class TaskController {
   }
 
   @UseGuards(jwtAuthGuard, TaskVotingGuard)
-  @Post('upvote/:id')
+  @Get('upvote/:id')
   upvote(@Param('id') taskId: number) {
     return this.taskService.upvoted(taskId);
   }

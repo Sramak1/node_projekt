@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -50,6 +50,9 @@ export class TaskService {
 
   async upvoted(id: number) {
     const task = await this.findOne(id);
+    // if (task.voted == true) {
+    //   throw new BadRequestException('user has already upvoted this task');
+    // }
     task.voted = true;
     task.karma = task.karma + 1;
     return await this.taskRepository.save(task);
