@@ -44,7 +44,7 @@ export class TaskService {
   findMostVoted() {
     return this.taskRepository.find({
       order: { karma: 'desc' },
-      relations: ['user'],
+      relations: ['user', 'category'],
     });
   }
 

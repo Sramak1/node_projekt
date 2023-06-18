@@ -15,6 +15,8 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { jwtAuthGuard } from '../auth/guards/jwtAuth.guard';
 import { Task } from '../entity/task.entity';
+import { NotAutorGuard } from './guards/not-autor.guard';
+import { TaskVotingGuard } from './guards/task-voting.guard';
 
 @Controller('task')
 export class TaskController {
@@ -26,7 +28,7 @@ export class TaskController {
     return this.taskService.create(req.user.id, createTaskDto);
   }
 
-  @UseGuards(jwtAuthGuard)
+  @UseGuards(jwtAuthGuard, TaskVotingGuard)
   @Post('upvote/:id')
   upvote(@Param('id') taskId: number) {
     return this.taskService.upvoted(taskId);
@@ -43,14 +45,14 @@ export class TaskController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.taskService.findOne(+id);
   }
-
+  @UseGuards(jwtAuthGuard, NotAutorGuard)
   @Patch(':id')
   async update(
     @Request() req,
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateTaskDto: UpdateTaskDto,
   ) {
     const currentUser = req.user.id;
@@ -61,9 +63,9 @@ export class TaskController {
     return this.taskService.update(+id, updateTaskDto);
   }
 
-  @UseGuards(jwtAuthGuard)
+  @UseGuards(jwtAuthGuard, NotAutorGuard)
   @Delete(':id')
-  async remove(@Request() req, @Param('id') id: string) {
+  async remove(@Request() req, @Param('id') id: number) {
     const currentUser = req.user.id;
     const task: Task = await this.taskService.findOne(+id);
     if (currentUser != task.user.id) {

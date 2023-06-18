@@ -28,7 +28,7 @@ export class UserService {
     return this.userRepository.delete(id);
   }
   async findById(id: number): Promise<User> {
-    return this.userRepository.findOneBy({ id });
+    return this.userRepository.findOne({ where: { id }, relations: ['tasks'] });
   }
   async findByEmail(email: string): Promise<User> {
     return this.userRepository.findOneBy({ email });
