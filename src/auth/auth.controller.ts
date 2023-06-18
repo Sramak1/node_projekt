@@ -36,7 +36,9 @@ export class AuthController {
 
   @UseGuards(jwtAuthGuard)
   @Post('logout')
-  async logout(@Request() req) {
-    req.setHeader('Set-Cookie', `Access_token=;HttpOnly;Path=/;Max-Age=0`);
+  async logout(@Res() res: Response) {
+    res
+      .setHeader('Set-Cookie', `Access_token=;HttpOnly;Path=/;Max-Age=0`)
+      .sendStatus(200);
   }
 }
