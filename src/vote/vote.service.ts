@@ -1,11 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { CreateVoteDto } from './dto/create-vote.dto';
-import { UpdateVoteDto } from './dto/update-vote.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Vote } from '../entity/vote.entity';
+import { TaskService } from '../task/task.service';
 
 @Injectable()
 export class VoteService {
-  create(createVoteDto: CreateVoteDto) {
-    return 'This action adds a new vote';
+  constructor(
+    @InjectRepository(Vote) private voteRepository: Repository<Vote>,
+    private taskService: TaskService,
+  ) {}
+  create(user_id: number, task_id: number, value: boolean) {
+    const data = {
+      value,
+      task: { id: task_id },
+      user: { id: user_id },
+    };
+    console.log(data);
+    // return this.voteRepository.save(data).then(() => {
+    //   const karma = data.task.karma + 1;
+    //   return this.taskService.update(data.task.id, { karma });
+    // });
   }
 
   findAll() {
@@ -16,7 +31,7 @@ export class VoteService {
     return `This action returns a #${id} vote`;
   }
 
-  update(id: number, updateVoteDto: UpdateVoteDto) {
+  update(id: number) {
     return `This action updates a #${id} vote`;
   }
 

@@ -23,9 +23,9 @@ export class AuthController {
   constructor(private authService: AuthService) {}
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  signIn(@Request() req, @Res() res: Response) {
-    const jwt = req.user;
-    res.setHeader('Set-Cookie', [jwt]).json();
+  async signIn(@Request() req, @Res() res: Response) {
+    const token = await this.authService.signIn(req.user);
+    res.setHeader('Set-Cookie', token).json();
   }
 
   @UseGuards(jwtAuthGuard)

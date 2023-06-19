@@ -10,5 +10,8 @@ export class UpdateTaskDto extends PartialType(CreateTaskDto) {
   content?: string;
 
   @IsOptional()
+  karma?: number;
+
+  @IsOptional()
   category_id?: number;
 }

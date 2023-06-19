@@ -1,15 +1,27 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { VoteService } from './vote.service';
-import { CreateVoteDto } from './dto/create-vote.dto';
-import { UpdateVoteDto } from './dto/update-vote.dto';
+import { jwtAuthGuard } from '../auth/guards/jwtAuth.guard';
+import { NotAutorGuard } from '../task/guards/not-autor.guard';
 
 @Controller('vote')
 export class VoteController {
   constructor(private readonly voteService: VoteService) {}
 
-  @Post()
-  create(@Body() createVoteDto: CreateVoteDto) {
-    return this.voteService.create(createVoteDto);
+  @Post('upvote/:id')
+  @UseGuards(jwtAuthGuard, NotAutorGuard)
+  create(@Param('id') task_id: number, @Request() req) {
+    console.log(req.user);
+    return this.voteService.create(req.user.id, task_id, true);
   }
 
   @Get()
@@ -20,11 +32,6 @@ export class VoteController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.voteService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateVoteDto: UpdateVoteDto) {
-    return this.voteService.update(+id, updateVoteDto);
   }
 
   @Delete(':id')
