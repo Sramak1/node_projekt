@@ -3,13 +3,14 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  ManyToOne,
+  ManyToOne, OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+  UpdateDateColumn
+} from "typeorm";
 import { Category } from './category.entity';
 import { User } from './user.entity';
 import { IsNotEmpty } from 'class-validator';
+import { Vote } from "./vote.entity";
 
 @Entity('tasks')
 export class Task {
@@ -41,4 +42,7 @@ export class Task {
   @ManyToOne(() => Category, (category: Category) => category.tasks)
   @JoinColumn({ name: 'category_id' })
   category: Category;
+
+  @OneToMany(() => Vote, (vote) => vote.task)
+  votes: Vote[];
 }

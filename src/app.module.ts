@@ -9,6 +9,7 @@ import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
 import { TaskModule } from './task/task.module';
 import { CategoriesModule } from './categories/categories.module';
+import { VoteModule } from './vote/vote.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { CategoriesModule } from './categories/categories.module';
     AuthModule,
     TaskModule,
     CategoriesModule,
+    VoteModule,
   ],
   controllers: [AppController],
   providers: [AppService],

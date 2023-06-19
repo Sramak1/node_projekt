@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Task } from './task.entity';
+import { Vote } from './vote.entity';
 
 @Entity('users')
 export class User {
@@ -24,4 +25,7 @@ export class User {
 
   @OneToMany(() => Task, (task) => task.user)
   tasks: Task[];
+
+  @OneToMany(() => Vote, (vote) => vote.user)
+  votes: Vote[];
 }
