@@ -16,9 +16,9 @@ export class Vote {
   @Column()
   value: boolean;
 
-  @ManyToOne(() => Task, (task) => task.votes)
+  @ManyToOne(() => Task, (task) => task.votes, { onDelete: 'SET NULL' })
   task: Task;
 
-  @ManyToOne(() => User, (user) => user.votes)
+  @ManyToOne(() => User, (user) => user.votes, { onDelete: 'SET NULL' })
   user: User;
 }

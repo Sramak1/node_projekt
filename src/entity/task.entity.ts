@@ -32,11 +32,13 @@ export class Task {
   @Column({ default: 0 })
   karma: number;
 
-  @ManyToOne(() => User, (user: User) => user.tasks)
+  @ManyToOne(() => User, (user: User) => user.tasks, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToOne(() => Category, (category: Category) => category.tasks)
+  @ManyToOne(() => Category, (category: Category) => category.tasks, {
+    onDelete: 'SET NULL',
+  })
   @JoinColumn({ name: 'category_id' })
   category: Category;
 

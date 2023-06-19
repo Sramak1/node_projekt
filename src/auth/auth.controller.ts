@@ -1,19 +1,5 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Res,
-  UseGuards,
-  Request,
-} from '@nestjs/common';
+import { Controller, Get, Post, Res, UseGuards, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
-//import {LocalAuthGuard} from "./guards/localAuth.guard";
 import { Response } from 'express';
 import { LocalAuthGuard } from './guards/localAuth.guard';
 import { jwtAuthGuard } from './guards/jwtAuth.guard';
@@ -35,10 +21,14 @@ export class AuthController {
   }
 
   @UseGuards(jwtAuthGuard)
-  @Post('logout')
+  @Get('logout')
   async logout(@Res() res: Response) {
-    res
-      .setHeader('Set-Cookie', `Access_token=;HttpOnly;Path=/;Max-Age=0`)
-      .sendStatus(200);
+    try {
+      res
+        .setHeader('Set-Cookie', 'Access_token=; HttpOnly; Path =/; Max-Age=0;')
+        .sendStatus(200);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
