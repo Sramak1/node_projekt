@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Vote } from '../entity/vote.entity';
 import { TaskService } from '../task/task.service';
+import { Task } from '../entity/task.entity';
 
 @Injectable()
 export class VoteService {
@@ -10,17 +11,17 @@ export class VoteService {
     @InjectRepository(Vote) private voteRepository: Repository<Vote>,
     private taskService: TaskService,
   ) {}
-  create(user_id: number, task_id: number, value: boolean) {
+  async create(user_id: number, task_id: number, value: boolean) {
     const data = {
       value,
       task: { id: task_id },
       user: { id: user_id },
     };
-    console.log(data);
-    // return this.voteRepository.save(data).then(() => {
-    //   const karma = data.task.karma + 1;
-    //   return this.taskService.update(data.task.id, { karma });
-    // });
+    const taskDB = (await this.taskService.findOne(task_id)) as Task;
+    return this.voteRepository.save(data).then(() => {
+      const karma = taskDB.karma + 1;
+      return this.taskService.update(data.task.id, { karma });
+    });
   }
 
   findAll() {

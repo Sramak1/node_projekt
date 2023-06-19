@@ -30,7 +30,7 @@ export class UserService {
   async findById(id: number): Promise<User> {
     return this.userRepository.findOne({
       where: { id },
-      relations: ['tasks'],
+      relations: ['tasks.votes.user'],
     });
   }
   async findByEmail(email: string): Promise<User> {

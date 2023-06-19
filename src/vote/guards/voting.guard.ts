@@ -7,8 +7,7 @@ export class VotingGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const { user } = context.switchToHttp().getRequest();
-    for (const iterator of user.tasks) {
-      console.log(iterator);
+    for (const iterator of user.tasks.votes) {
       if (iterator.user.id == user.id) {
         return false;
       }
