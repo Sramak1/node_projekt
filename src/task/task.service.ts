@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common";
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -34,8 +34,18 @@ export class TaskService {
   }
 
   async update(id: number, updateTaskDto: UpdateTaskDto) {
-    await this.taskRepository.update(id, updateTaskDto);
-    return this.findOne(id);
+    try {
+      const task = await this.findOne(id);
+      for (const key in task) {
+        if (updateTaskDto[key] !== undefined) task[key] = updateTaskDto[key];
+      }
+      return this.taskRepository.save(task);
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Something went wrong while updating the quote.',
+      );
+    }
   }
 
   remove(id: number): Promise<DeleteResult> {

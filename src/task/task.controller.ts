@@ -16,6 +16,7 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { jwtAuthGuard } from '../auth/guards/jwtAuth.guard';
 import { Task } from '../entity/task.entity';
 import { UserGuard } from '../user/guards/user.guard';
+import { NotAutorGuard } from './guards/not-autor.guard';
 
 @Controller('task')
 export class TaskController {
@@ -41,7 +42,7 @@ export class TaskController {
   findOne(@Param('id') id: number) {
     return this.taskService.findOne(+id);
   }
-  @UseGuards(jwtAuthGuard, UserGuard)
+  @UseGuards(jwtAuthGuard)
   @Patch(':id')
   async update(
     @Request() req,

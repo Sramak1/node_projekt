@@ -6,9 +6,12 @@ export class NotAutorGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const { user, params } = context.switchToHttp().getRequest();
+    const { user, params, task } = context.switchToHttp().getRequest();
     for (const iterator of user.tasks) {
       if (iterator.id == params.id) return false;
+    }
+    for (const iterator of task.user) {
+      if (params.id ==1 ) return false;
     }
     return true;
   }
