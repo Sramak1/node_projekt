@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common";
+import { BadRequestException, Injectable, InternalServerErrorException, Param } from "@nestjs/common";
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -23,13 +23,13 @@ export class TaskService {
   }
 
   async findAll(): Promise<Task[]> {
-    return await this.taskRepository.find({ relations: ['user'] });
+    return await this.taskRepository.find({ relations: ['user', 'category'] });
   }
 
   async findOne(id: number): Promise<Task> {
     return await this.taskRepository.findOne({
       where: { id },
-      relations: ['user'],
+      relations: ['user', 'category'],
     });
   }
 
@@ -37,7 +37,9 @@ export class TaskService {
     try {
       const task = await this.findOne(id);
       for (const key in task) {
-        if (updateTaskDto[key] !== undefined) task[key] = updateTaskDto[key];
+        if (updateTaskDto[key] !== undefined) {
+          task[key] = updateTaskDto[key];
+        }
       }
       return this.taskRepository.save(task);
     } catch (error) {
@@ -56,5 +58,15 @@ export class TaskService {
       order: { karma: 'desc' },
       relations: ['user', 'category'],
     });
+  }
+  async activeSearch(search: string): Promise<Task[]> {
+    const searchExist: Task[] = [];
+    const tasks = await this.findAll();
+    tasks.forEach((task: Task) => {
+      if (task.title.includes(search)) {
+        searchExist.push(task);
+      }
+    });
+    return searchExist;
   }
 }

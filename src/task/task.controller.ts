@@ -67,4 +67,11 @@ export class TaskController {
     }
     return this.taskService.remove(+id);
   }
+
+  @Post('search')
+  async search(@Request() req) {
+    const body = await req.body;
+    const { search } = body;
+    return await this.taskService.activeSearch(search);
+  }
 }
