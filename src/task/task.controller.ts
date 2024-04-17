@@ -37,7 +37,14 @@ export class TaskController {
   findMostVoted() {
     return this.taskService.findMostVoted();
   }
-
+  @Get('findNewest')
+  async findNewest() {
+    return await this.taskService.findNewest();
+  }
+  @Get('findOldest')
+  async findOldest() {
+    return await this.taskService.findOldest();
+  }
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.taskService.findOne(+id);

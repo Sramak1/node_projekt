@@ -59,6 +59,22 @@ export class TaskService {
       relations: ['user', 'category'],
     });
   }
+  async findNewest() {
+    const findenew = await this.taskRepository.find({
+      order: { created_at: 'desc' },
+      relations: ['user', 'category'],
+    });
+    console.log(findenew);
+    return findenew;
+  }
+  async findOldest() {
+    const findold = await this.taskRepository.find({
+      order: { created_at: 'asc' },
+      relations: ['user', 'category'],
+    });
+    console.log(findold);
+    return findold;
+  }
   async activeSearch(search: string): Promise<Task[]> {
     const searchExist: Task[] = [];
     const tasks = await this.findAll();
