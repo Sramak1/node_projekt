@@ -72,7 +72,6 @@ export class TaskService {
       order: { created_at: 'asc' },
       relations: ['user', 'category'],
     });
-    console.log(findold);
     return findold;
   }
   async activeSearch(search: string): Promise<Task[]> {
