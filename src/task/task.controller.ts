@@ -70,7 +70,7 @@ export class TaskController {
     const currentUser = req.user.id;
     const task: Task = await this.taskService.findOne(+id);
     if (currentUser != task.user.id) {
-      throw new BadRequestException('It is not your task');
+      throw new BadRequestException('Ni vase opravilo');
     }
     return this.taskService.remove(+id);
   }
