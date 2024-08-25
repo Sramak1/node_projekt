@@ -5,11 +5,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DeleteResult } from 'typeorm';
 import { Task } from '../entity/task.entity';
 import { User } from '../entity/user.entity';
+import { CategoriesService } from "../categories/categories.service";
 
 @Injectable()
 export class TaskService {
   constructor(
     @InjectRepository(Task) private taskRepository: Repository<Task>,
+    private category_service: CategoriesService,
   ) {}
 
   async create(user_id: number, createTaskDto: CreateTaskDto) {
@@ -36,16 +38,20 @@ export class TaskService {
   async update(id: number, updateTaskDto: UpdateTaskDto) {
     try {
       const task = await this.findOne(id);
+      const category = await this.category_service.findOne(
+        updateTaskDto.category_id,
+      );
       for (const key in task) {
         if (updateTaskDto[key] !== undefined) {
           task[key] = updateTaskDto[key];
         }
       }
+      task.category = category;
       return this.taskRepository.save(task);
     } catch (error) {
       console.error(error);
       throw new InternalServerErrorException(
-        'Something went wrong while updating the quote.',
+        'Something went wrong while updating the task.',
       );
     }
   }
